@@ -538,8 +538,6 @@ if __name__ == "__main__":
                 if j%2 == 0:
                     fluidArr.remove(j)
             print('inner loop ends')
-    # output: 0,'b','a',3,4,5,6
-    # final list: ['c','b','a',3,4,5,6]
     
     print(' ')
     print('test 10')
