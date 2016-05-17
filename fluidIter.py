@@ -232,7 +232,12 @@ class FluidIterator:
             # interpreted as their default values
             curLen = self.currentIterableLength
             start, stop, step = getSliceValues(sliceObj, curLen)
+            deleteLocs = []
             for deleteLoc in range(start, stop, step):
+                deleteLocs.append(deleteLoc)
+            if step > 0:
+                deleteLocs.reverse()
+            for deleteLoc in deleteLocs:
                 self.incrementHandler(deleteLoc, -1)
         else:
             raise NotImplementedError("sliceObj is of type:" + str(type(sliceObj)))
@@ -487,6 +492,7 @@ if __name__ == "__main__":
             
     print(' ')
     print('test 6')
+    print('replacing a section with a section of a different length')
     fluidArr = FluidIterable([0,1,2,3,4,5,6])
     for i in fluidArr:
         print(i)
@@ -498,6 +504,7 @@ if __name__ == "__main__":
     
     print(' ')
     print('test 7')
+    print('replacing current interating section with a section of the same length')
     fluidArr = FluidIterable([0,1,2,3,4,5,6])
     for i in fluidArr:
         print(i)
@@ -509,6 +516,18 @@ if __name__ == "__main__":
     
     print(' ')
     print('test 8')
+    print('replacing current interating section with a section of a different length')
+    fluidArr = FluidIterable([0,1,2,3,4,5,6])
+    for i in fluidArr:
+        print(i)
+        print(fluidArr)
+        if i is 2:
+            fluidArr[1:5] = ['a','b','c']
+    # output: 0, 1, 2, 5, 6
+    # final list: [0, 'a', 'b', 'c', 5, 6]
+    
+    print(' ')
+    print('test 9')
     fluidArr = FluidIterable([0,1,2,3,4,5,6])
     for i in fluidArr:
         print(i)
@@ -523,7 +542,7 @@ if __name__ == "__main__":
             print('inner loop ends')
     
     print(' ')
-    print('test 9')
+    print('test 10')
     fluidArr = FluidIterable([0,1,2,3,4,5,6,7,8])
     for i in fluidArr:
         print(i)
@@ -538,17 +557,14 @@ if __name__ == "__main__":
             print('inner loop ends')
     
     print(' ')
-    print('test 10')
+    print('test 11')
     l = [0,1,2,3,4,5,6,7,8]  
     fluidL = FluidIterable(l)                       
     for i in fluidL:
-        print('initial state of list on this iteration: ' + str(l)) 
+        print('initial state of list on this iteration: ' + str(fluidL)) 
         print('current iteration value: ' + str(i))
         print('popped value: ' + str(fluidL.pop(2)))
         print(' ')
     # output: 8,7,6,5,4
     # final list: [0,1,2,3]
-
-
-
-
+    
