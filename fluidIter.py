@@ -521,8 +521,6 @@ if __name__ == "__main__":
                 if j is 0:
                     fluidArr[:0] = ['a','b','c']
             print('inner loop ends')
-    # output: 0,'b','a',3,4,5,6
-    # final list: ['c','b','a',3,4,5,6]
     
     print(' ')
     print('test 9')
