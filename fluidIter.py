@@ -601,7 +601,6 @@ if __name__ == "__main__":
     import random
     # randInts = [random.randint(1,100) for _ in range(10)]
     randInts = [70, 20, 61, 80, 54, 18, 7, 18, 55, 9]
-    guaranteeListStaysSameLength = True
     fRandInts = FluidIterable(randInts)
     fRandIntsIter = fRandInts.__iter__()
     for i in fRandIntsIter:
@@ -615,11 +614,6 @@ if __name__ == "__main__":
                 # if the element is a multiple of the element that the outer
                 # loop is on, remove it
                 if j%i == 0:
-                    if guaranteeListStaysSameLength:
-                        # replace any removed values with newly generated values
-                        # so that the length of the list doesn't change
-                        rn = random.randint(1,100)
-                        fRandInts.append(rn)
                     print('remove val: ', j)
                     del fRandInts[innerIndex]
                 # end if multiple, then remove
