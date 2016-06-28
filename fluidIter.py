@@ -1,6 +1,7 @@
 import uuid
 import enum
 import types
+import collections
 
 @enum.unique
 class ChangeType(enum.Enum):
@@ -58,8 +59,10 @@ def getSubscritionFunctionClosures():
     
 # end getSubscritionFunctionClosures
 
-
-class FluidIterable:
+# inheriting from MutableSequence allows us to call functions like apppend
+# even though these functions are not defined explicitly they will use the
+# insert method
+class FluidIterable(collections.MutableSequence):
     
     # what  about sorting, reversing and reordering?
     # would be nice to move the index of the current iteration value
@@ -207,6 +210,13 @@ class FluidIterator:
 
 
     def incrementHandler(self, addedIndex, incVal):
+        # if the "addedIndex" is greater/equal to the current length of 
+        # the list, it will be because the list is being extended
+        # extending the list will mean the current index does not need to
+        # be changed
+        if addedIndex >= self.currentIterableLength:
+            return
+            
         # map any negative indices to positive ones
         i = addedIndex % self.currentIterableLength
         if i <= self.currentIndex:
@@ -568,3 +578,54 @@ if __name__ == "__main__":
     # output: 8,7,6,5,4
     # final list: [0,1,2,3]
     
+    print(' ')
+    print('test 12')
+    fluidArr = FluidIterable([0,1,2,3])
+    # get iterator first so can query the current index
+    fluidArrIter = fluidArr.__iter__()
+    for i, v in enumerate(fluidArrIter):
+        print('enum: ', i)
+        print('current val: ', v)
+        print('current ind: ', fluidArrIter.currentIndex)
+        print(fluidArr)
+        fluidArr.insert(0,'a')
+        print(' ')
+        
+    print('Final List Value: ' + str(fluidArr))
+
+    
+    ## Reduce list to contain no multiples of any other element
+    
+    print(' ')
+    print('use case 1')
+    import random
+    # randInts = [random.randint(1,100) for _ in range(10)]
+    randInts = [70, 20, 61, 80, 54, 18, 7, 18, 55, 9]
+    guaranteeListStaysSameLength = True
+    fRandInts = FluidIterable(randInts)
+    fRandIntsIter = fRandInts.__iter__()
+    for i in fRandIntsIter:
+        print(' ')
+        print('outer val: ', i)
+        innerIntsIter = fRandInts.__iter__()
+        for j in innerIntsIter:
+            innerIndex = innerIntsIter.currentIndex
+            # skip the element that the outloop is currently on
+            if not innerIndex == fRandIntsIter.currentIndex:
+                # if the element is a multiple of the element that the outer
+                # loop is on, remove it
+                if j%i == 0:
+                    if guaranteeListStaysSameLength:
+                        # replace any removed values with newly generated values
+                        # so that the length of the list doesn't change
+                        rn = random.randint(1,100)
+                        fRandInts.append(rn)
+                    print('remove val: ', j)
+                    del fRandInts[innerIndex]
+                # end if multiple, then remove
+            # end if not the same value as outer loop
+        # end inner loop
+    # end outerloop
+    
+    print(randInts)
+             
